@@ -6,7 +6,7 @@ output:
     css: "style.css"
 ---
 
-Find how the census tracts changed from 2010 to 2020 in Delaware
+Find out how the census tracts changed from 2010 to 2020 in Delaware
 
 ```{r echo=FALSE, out.width="100%", out.height="80vh", message=FALSE, warning=FALSE}
 library(here)
