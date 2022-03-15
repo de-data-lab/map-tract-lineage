@@ -13,8 +13,8 @@ DE_shape_2010 <-  read_sf(here("data/raw/cb_2018_10_tract_500k/"))
 # Using 2020 CB shape that uses 2020 districting
 DE_shape_2020 <- read_sf(here("data/raw/cb_2020_10_tract_500k/"))
 
-default_lat <- 39.1824#39.1824#39.5393
-default_lng <- -75.4#-75.2
+default_lat <- 39.1824
+default_lng <- -75.4
 
 render_label <- function(year, census_tract, GEOID){
     return(paste0("Year: ", year, " | ",
