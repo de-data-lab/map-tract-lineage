@@ -4,6 +4,8 @@ output:
   html_document:
     df_print: paged
     css: "style.css"
+    includes:
+        after_body: "footer.html"
 ---
 
 Find out how the census tracts changed from 2010 to 2020 in Delaware
