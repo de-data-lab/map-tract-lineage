@@ -8,8 +8,7 @@ output:
 
 Find how the census tracts changed from 2010 to 2020 in Delaware
 
-
-```{r echo=FALSE, out.width="100%", out.height="100vh", message=FALSE, warning=FALSE}
+```{r echo=FALSE, out.width="100%", out.height="80vh", message=FALSE, warning=FALSE}
 library(here)
 source("../plot_map.R")
 plot_map()
