@@ -6,8 +6,8 @@ output:
     css: "style.css"
 ---
 
+Find how the census tracts changed from 2010 to 2020 in Delaware
 
-Map the census tract lineage from 2010 to 2020 in Delaware.
 
 ```{r echo=FALSE, out.width="100%", out.height="100vh", message=FALSE, warning=FALSE}
 library(here)
