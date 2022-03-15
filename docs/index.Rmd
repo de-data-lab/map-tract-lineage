@@ -17,7 +17,7 @@ plot_map()
 
 ### Data Sources
 
-US Census Bureau's Cartographic Boundary Files ([2019-onwards](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html) & [pre-2018](https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html#:~:text=The%20cartographic%20boundary%20files%20are,for%20small%20scale%20thematic%20mapping);):
+US Census Bureau's Cartographic Boundary Files ([-2018](https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html#:~:text=The%20cartographic%20boundary%20files%20are,for%20small%20scale%20thematic%20mapping) & [2019-](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html)):
 
 - [2010 boundary data](https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_10_tract_500k.zip) (from the 2018 data)
 - [2020 boundary data](https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_10_tract_500k.zip) 
