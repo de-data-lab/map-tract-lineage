@@ -13,21 +13,58 @@ DE_shape_2010 <-  read_sf(here("data/raw/cb_2018_10_tract_500k/"))
 # Using 2020 CB shape that uses 2020 districting
 DE_shape_2020 <- read_sf(here("data/raw/cb_2020_10_tract_500k/"))
 
+# Default anchor for the leaflet view
 default_lat <- 39.1824
 default_lng <- -75.4
 
+# Function to create leaflet labels
 render_label <- function(year, census_tract, GEOID){
     return(paste0("Year: ", year, " | ",
                   "Census Tract: ", census_tract, " | ",
                   "GEOID: ", GEOID))
 }
 
+# Create leaflet labels
 DE_shape_2010 <- DE_shape_2010 %>%
     mutate(leaflet_label = render_label(2010, NAME, GEOID))
 
 DE_shape_2020 <- DE_shape_2020 %>%
     mutate(leaflet_label = render_label(2020, NAME, GEOID))
 
+# Arrange the tracts by the tract number
+DE_shape_2010 <- DE_shape_2010 %>% 
+    mutate(geometry_col = .data$geometry) %>%
+    arrange(TRACTCE)
+
+DE_shape_2020 <- DE_shape_2020 %>% 
+    mutate(geometry_col = .data$geometry) %>%
+    arrange(TRACTCE)
+
+# Drop geometry for join operations 
+DE_shape_2010_nogeo <- DE_shape_2010 %>%
+    st_drop_geometry()
+
+DE_shape_2020_nogeo <- DE_shape_2020 %>%
+    st_drop_geometry()
+
+# Combine 2010 and 2020 data
+DE_shape_2010_nogeo_joined <- DE_shape_2010_nogeo %>%
+    full_join(DE_shape_2020,
+              by = "GEOID",
+              suffix = c("_2010", "_2020"))
+
+# Map through to calculate symmetric differences
+DE_shape_diff <- DE_shape_2010_nogeo_joined %>%
+    mutate(geometry_sym_diff = map2(geometry_col_2010, 
+                                    geometry_col_2020,
+                                    st_sym_difference))
+
+# Convert the shape for the symmetric difference
+DE_shape_diff <-  DE_shape_diff %>% 
+    mutate(geometry = st_as_sfc(geometry_sym_diff))
+
+# Assign back the geometry to the data frame
+st_geometry(DE_shape_diff) <- DE_shape_diff$geometry
 
 plot_map <- function(){
     
@@ -39,6 +76,7 @@ plot_map <- function(){
         setView(lng = default_lng,
                 lat = default_lat,
                 zoom = 9) %>%
+        addPolygons(data = DE_shape_diff) %>%
         addPolygons(data = DE_shape_2010, 
                     color = "#1b9e77",
                     weight = 6,
