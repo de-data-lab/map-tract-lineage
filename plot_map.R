@@ -22,18 +22,22 @@ default_lng <- -75.4
 
 # Function to create leaflet labels
 render_label <- function(year, census_tract, GEOID){
-    return(paste0("Year: ", year, " | ",
-                  "Census Tract: ", census_tract, " | ",
-                  "GEOID: ", GEOID))
+    label_string <- paste0(tags$b(year), "<br>",
+                           "Census Tract: ", census_tract, "<br>",
+                           "GEOID: ", GEOID)
+    return(label_string)
 }
 
 # Create leaflet labels
 DE_shape_2010 <- DE_shape_2010 %>%
-    mutate(leaflet_label = render_label(2010, NAME, GEOID))
+    rowwise() %>%
+    mutate(leaflet_label = HTML(render_label(2010, NAME, GEOID))) %>%
+    ungroup()
 
 DE_shape_2020 <- DE_shape_2020 %>%
-    mutate(leaflet_label = render_label(2020, NAME, GEOID))
-
+    rowwise() %>%
+    mutate(leaflet_label = HTML(render_label(2020, NAME, GEOID))) %>%
+    ungroup()
 
 # Get the difference between two shapefiles
 DE_shape_diff <- get_diff(DE_shape_2010, DE_shape_2020)
@@ -60,15 +64,17 @@ plot_map <- function(){
                     group = DE_2010_grp_name,
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
-                    label = ~htmlEscape(leaflet_label)) %>%
+                    label = ~leaflet_label,
+                    options = pathOptions(pane = "2010")) %>%
         addPolygons(data = DE_shape_2020,
                     color = "#d95f02",
                     weight = 3,
                     group = DE_2020_grp_name,
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
-                    label = ~htmlEscape(leaflet_label)) %>%
         addLayersControl(overlayGroups = c(DE_2010_grp_name, DE_2020_grp_name,
                                            "Symmetric Difference"),
+                    label = ~leaflet_label,
+                    options = pathOptions(pane = "2020")) %>%
                          options = layersControlOptions(collapsed = FALSE))
 }
