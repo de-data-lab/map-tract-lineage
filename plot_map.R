@@ -38,8 +38,6 @@ DE_shape_2020 <- DE_shape_2020 %>%
 # Get the difference between two shapefiles
 DE_shape_diff <- get_diff(DE_shape_2010, DE_shape_2020)
 
-DE_shape_anti <- get_anti_diff(DE_shape_2010, DE_shape_2020)
-
 plot_map <- function(){
     
     DE_2010_grp_name <- "<span style='color: #1b9e77'/>2010</span>"
@@ -56,8 +54,6 @@ plot_map <- function(){
                     label = ~leaflet_label,
                     labelOptions = labelOptions(noHide = FALSE),
                     group = "Symmetric Difference") %>%
-        addPolygons(data = DE_shape_anti,
-                    group = "Anti Difference") %>%
         addPolygons(data = DE_shape_2010, 
                     color = "#1b9e77",
                     weight = 6,
@@ -73,7 +69,6 @@ plot_map <- function(){
                                                  weight = 2),
                     label = ~htmlEscape(leaflet_label)) %>%
         addLayersControl(overlayGroups = c(DE_2010_grp_name, DE_2020_grp_name,
-                                           "Symmetric Difference",
-                                           ),
+                                           "Symmetric Difference"),
                          options = layersControlOptions(collapsed = FALSE))
 }
