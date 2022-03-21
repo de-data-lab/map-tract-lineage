@@ -46,6 +46,7 @@ plot_map <- function(){
     
     DE_2010_grp_name <- "<span style='color: #1b9e77'/>2010</span>"
     DE_2020_grp_name <- "<span style='color: #d95f02'/>2020</span>"
+    diff_layer_name <- "<span style='color: #3477eb'/>Difference</span>"
     
     leaflet() %>%
         addProviderTiles(providers$CartoDB.Positron) %>% 
@@ -57,7 +58,8 @@ plot_map <- function(){
                                                  weight = 2),
                     label = ~leaflet_label,
                     labelOptions = labelOptions(noHide = FALSE),
-                    group = "Symmetric Difference") %>%
+                    group = diff_layer_name,
+                    options = pathOptions(pane = "diff")) %>%
         addPolygons(data = DE_shape_2010, 
                     color = "#1b9e77",
                     weight = 6,
@@ -72,9 +74,10 @@ plot_map <- function(){
                     group = DE_2020_grp_name,
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
-        addLayersControl(overlayGroups = c(DE_2010_grp_name, DE_2020_grp_name,
-                                           "Symmetric Difference"),
                     label = ~leaflet_label,
                     options = pathOptions(pane = "2020")) %>%
+        addLayersControl(overlayGroups = c(diff_layer_name,
+                                           DE_2010_grp_name, 
+                                           DE_2020_grp_name),
                          options = layersControlOptions(collapsed = FALSE))
 }
