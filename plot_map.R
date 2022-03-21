@@ -7,6 +7,9 @@ library(tigris)
 library(sf)
 library(htmltools) # Escaping HTML for security
 
+# source scripts
+source(here("r/get_diff.R"))
+
 # Using 2018 Cartographic Boundary (CB) shape that uses 2010 districting 
 # (older files have compatibility issues)
 DE_shape_2010 <-  read_sf(here("data/raw/cb_2018_10_tract_500k/"))
@@ -31,40 +34,11 @@ DE_shape_2010 <- DE_shape_2010 %>%
 DE_shape_2020 <- DE_shape_2020 %>%
     mutate(leaflet_label = render_label(2020, NAME, GEOID))
 
-# Arrange the tracts by the tract number
-DE_shape_2010 <- DE_shape_2010 %>% 
-    mutate(geometry_col = .data$geometry) %>%
-    arrange(TRACTCE)
 
-DE_shape_2020 <- DE_shape_2020 %>% 
-    mutate(geometry_col = .data$geometry) %>%
-    arrange(TRACTCE)
+# Get the difference between two shapefiles
+DE_shape_diff <- get_diff(DE_shape_2010, DE_shape_2020)
 
-# Drop geometry for join operations 
-DE_shape_2010_nogeo <- DE_shape_2010 %>%
-    st_drop_geometry()
-
-DE_shape_2020_nogeo <- DE_shape_2020 %>%
-    st_drop_geometry()
-
-# Combine 2010 and 2020 data
-DE_shape_2010_nogeo_joined <- DE_shape_2010_nogeo %>%
-    full_join(DE_shape_2020,
-              by = "GEOID",
-              suffix = c("_2010", "_2020"))
-
-# Map through to calculate symmetric differences
-DE_shape_diff <- DE_shape_2010_nogeo_joined %>%
-    mutate(geometry_sym_diff = map2(geometry_col_2010, 
-                                    geometry_col_2020,
-                                    st_sym_difference))
-
-# Convert the shape for the symmetric difference
-DE_shape_diff <-  DE_shape_diff %>% 
-    mutate(geometry = st_as_sfc(geometry_sym_diff))
-
-# Assign back the geometry to the data frame
-st_geometry(DE_shape_diff) <- DE_shape_diff$geometry
+DE_shape_anti <- get_anti_diff(DE_shape_2010, DE_shape_2020)
 
 plot_map <- function(){
     
