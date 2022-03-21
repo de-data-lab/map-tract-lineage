@@ -50,7 +50,14 @@ plot_map <- function(){
         setView(lng = default_lng,
                 lat = default_lat,
                 zoom = 9) %>%
-        addPolygons(data = DE_shape_diff) %>%
+        addPolygons(data = DE_shape_diff,
+                    highlight = highlightOptions(fillOpacity = 0.8,
+                                                 weight = 2),
+                    label = ~leaflet_label,
+                    labelOptions = labelOptions(noHide = FALSE),
+                    group = "Symmetric Difference") %>%
+        addPolygons(data = DE_shape_anti,
+                    group = "Anti Difference") %>%
         addPolygons(data = DE_shape_2010, 
                     color = "#1b9e77",
                     weight = 6,
@@ -65,6 +72,8 @@ plot_map <- function(){
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
                     label = ~htmlEscape(leaflet_label)) %>%
-        addLayersControl(overlayGroups = c(DE_2010_grp_name, DE_2020_grp_name),
+        addLayersControl(overlayGroups = c(DE_2010_grp_name, DE_2020_grp_name,
+                                           "Symmetric Difference",
+                                           ),
                          options = layersControlOptions(collapsed = FALSE))
 }
