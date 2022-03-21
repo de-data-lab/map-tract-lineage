@@ -53,3 +53,43 @@ get_diff <- function(sfc1, sfc2, suffix = c("_2010", "_2020")){
     
     return(shape_diff)
 }
+
+
+get_anti_diff <- function(sfc1, sfc2, suffix = c("_2010", "_2020")){
+    
+    # Get the geometry in a different column 
+    # and arrange
+    sfc1 <- sfc1 %>% 
+        mutate(geometry_col = .data$geometry) %>%
+        arrange(TRACTCE)
+    
+    sfc2 <- sfc2 %>% 
+        mutate(geometry_col = .data$geometry) %>%
+        arrange(TRACTCE)
+    
+    # Drop geometry for join operations 
+    sfc1_nogeo <- sfc1 %>%
+        st_drop_geometry()
+    
+    sfc2_nogeo <- sfc2 %>%
+        st_drop_geometry()
+    
+    # Combine 2010 and 2020 data
+    nogeo_joined <- sfc1_nogeo %>%
+        anti_join(sfc2_nogeo,
+                  by = "GEOID",
+                  suffix = suffix)
+    
+    st_geometry(nogeo_joined) <- nogeo_joined$geometry_col
+
+        # Label the joined df
+    shape_diff <- nogeo_joined %>%
+        rowwise() %>%
+        mutate(leaflet_label = HTML(paste0("anti"))) %>% 
+        ungroup()
+    
+    # rmapshaper::ms_simplify could be used to simplify slivers
+    
+    return(shape_diff)
+}
+

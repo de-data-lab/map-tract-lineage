@@ -74,6 +74,7 @@ plot_map <- function(){
                     label = ~htmlEscape(leaflet_label)) %>%
         addLayersControl(overlayGroups = c(DE_2010_grp_name, DE_2020_grp_name,
                                            "Symmetric Difference",
+                                           "Anti Difference"
                                            ),
                          options = layersControlOptions(collapsed = FALSE))
 }
