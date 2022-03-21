@@ -53,6 +53,9 @@ plot_map <- function(){
         setView(lng = default_lng,
                 lat = default_lat,
                 zoom = 9) %>%
+        addMapPane("diff", zIndex = 400) %>%
+        addMapPane("2010", zIndex = 450) %>%
+        addMapPane("2020", zIndex = 500) %>%
         addPolygons(data = DE_shape_diff,
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
