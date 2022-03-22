@@ -70,7 +70,8 @@ plot_map <- function(){
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
                     label = ~leaflet_label,
-                    options = pathOptions(pane = "2010")) %>%
+                    options = pathOptions(pane = "2010"),
+                    popup = ~leaflet_label) %>%
         addPolygons(data = DE_shape_2020,
                     color = "#d95f02",
                     weight = 3,
@@ -78,7 +79,8 @@ plot_map <- function(){
                     highlight = highlightOptions(fillOpacity = 0.8,
                                                  weight = 2),
                     label = ~leaflet_label,
-                    options = pathOptions(pane = "2020")) %>%
+                    options = pathOptions(pane = "2020"),
+                    popup = ~leaflet_label) %>%
         addLayersControl(overlayGroups = c(diff_layer_name,
                                            DE_2010_grp_name, 
                                            DE_2020_grp_name),
