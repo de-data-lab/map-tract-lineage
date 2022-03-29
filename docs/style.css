@@ -1,3 +1,12 @@
 .leaflet-control-layers {
     font-size: 2rem;
 }
+
+.year-2020 {
+    color: #d95f02;
+    align-self: center;
+}
+
+.year-2010 {
+    color: #1b9e77;
+}
