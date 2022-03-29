@@ -22,7 +22,8 @@ default_lng <- -75.4
 
 # Function to create leaflet labels
 render_label <- function(year, census_tract, GEOID){
-    label_string <- paste0(tags$b(year), "<br>",
+    label_string <- paste0(tags$b(year, class = paste0("year-", year)),
+                           "<br>",
                            "Census Tract: ", census_tract, "<br>",
                            "GEOID: ", GEOID)
     return(label_string)
